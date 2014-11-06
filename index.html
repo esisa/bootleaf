@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>BootLeaf</title>
+    <title>Turkompisen Stifinneren</title>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
@@ -34,11 +34,11 @@
             <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
             <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
           </div>
-          <a class="navbar-brand" href="#">BootLeaf</a>
+          <a class="navbar-brand" href="#">Stifinneren</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <!--li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
             <li class="dropdown">
               <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -64,7 +64,7 @@
                 <input id="searchbox" type="text" placeholder="Search" class="form-control">
                 <span id="searchicon" class="fa fa-search form-control-feedback"></span>
             </div>
-          </form>
+          </form-->
         </div><!--/.navbar-collapse -->
       </div>
     </div>
@@ -73,50 +73,47 @@
       <div id="sidebar">
         <div class="sidebar-wrapper">
           <div class="panel panel-default" id="features">
-            <div class="panel-heading">
+            <!--div class="panel-heading">
               <h3 class="panel-title">Points of Interest
               <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
-            </div>
+            </div-->
             <div class="panel-body">
               <p>
                 <div class="row">
                   <div class="col-xs-8 col-md-8">
-                    <input type="text" class="form-control search" placeholder="Filter" />
+                    <input type="text" class="form-control search" placeholder="Stedsnavn" />
                   </div>
                   <div class="col-xs-4 col-md-4">
-                    <button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn"><i class="fa fa-sort"></i>&nbsp;&nbsp;Sort</button>
+                    <button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn">Lag tur</button>
                   </div>
                 </div>
               </p>
+              <p>
+                Lengde på turen:
+                <input type="range" name="points" min="0" max="50">
+              </p>
+              <p>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">Gå</button>
+                  <button type="button" class="btn btn-default">Sykkel</button>
+                  <button type="button" class="btn btn-primary">Ski</button>
+                </div>
+              </p>
+              <p>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">Med barn</button>
+                  <button type="button" class="btn btn-primary">Mosjonist</button>
+                  <button type="button" class="btn btn-default">Blodsprek</button>
+                </div>
+              </p>
             </div>
-            <div class="sidebar-table">
-              <table class="table table-hover" id="feature-list">
-                <thead class="hidden">
-                  <tr>
-                    <th>Icon</th>
-                  <tr>
-                  <tr>
-                    <th>Name</th>
-                  <tr>
-                  <tr>
-                    <th>Chevron</th>
-                  <tr>
-                </thead>
-                <tbody class="list"></tbody>
-              </table>
-            </div>
+            
           </div>
         </div>
       </div>
       <div id="map"></div>
     </div>
-    <div id="loading">
-      <div class="loading-indicator">
-        <div class="progress progress-striped active">
-          <div class="progress-bar progress-bar-info progress-bar-full"></div>
-        </div>
-      </div>
-    </div>
+    
 
     <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg">
