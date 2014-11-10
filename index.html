@@ -84,7 +84,7 @@
                     <input type="text" class="form-control search" placeholder="Stedsnavn" />
                   </div>
                   <div class="col-xs-4 col-md-4">
-                    <button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn">Lag tur</button>
+                    <button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn" onClick="createRoutes()">Lag tur</button>
                   </div>
                 </div>
               </p>
@@ -106,6 +106,20 @@
                   <button type="button" class="btn btn-default">Blodsprek</button>
                 </div>
               </p>
+              <div class="col-xs-12 col-md-12" id="routeSuggestions">
+                <h4>Turforslag:</h4>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(0)">Turforslag 1</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(1)">Turforslag 2</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(2)">Turforslag 3</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(3)">Turforslag 3</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(4)">Turforslag 4</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(5)">Turforslag 5</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(6)">Turforslag 6</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(7)">Turforslag 7</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(8)">Turforslag 8</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(9)">Turforslag 9</button></p>
+                <p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute(10)">Turforslag 10</button></p>
+              </div>
             </div>
             
           </div>
@@ -295,5 +309,6 @@
     <script src="//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js"></script>
     <script src="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
     <script src="assets/js/app.js"></script>
+    <!--script src="assets/js/OSRM.RoutingGeometry.js"></script-->
   </body>
 </html>

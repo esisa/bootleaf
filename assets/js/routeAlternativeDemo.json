@@ -1,0 +1,22 @@
+
+[
+	{
+		"startPoint": [60, 10],
+		"endPoint": [60, 10],
+		"viaPoint1":[61, 11],
+		"viaPoint2":[62, 11]
+	},
+	{
+		"startPoint": [60, 10],
+		"endPoint": [60, 10],
+		"viaPoint1":[59, 10],
+		"viaPoint2":[60, 11]
+	}
+	,
+	{
+		"startPoint": [60, 10],
+		"endPoint": [60, 10],
+		"viaPoint1":[58, 10],
+		"viaPoint2":[58, 9]
+	}
+]

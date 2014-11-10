@@ -1,5 +1,10 @@
 var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [];
 
+var routeAlternatives;
+var geometry;
+var marker;
+var viaMarker1, viaMarker2;
+
 $(document).on("click", ".feature-row", function(e) {
   sidebarClick(parseInt($(this).attr("id"), 10));
 });
@@ -83,17 +88,20 @@ var kartverket = new L.TileLayer("http://opencache.statkart.no/gatekeeper/gk/gk.
 
 
 map = L.map("map", {
-  zoom: 8,
-  center: [60, 10],
-  layers: [turkompisenTur],
+  zoom: 12,
+  center: [59.74289, 10.19712],
+  layers: [turkompisenSki],
   zoomControl: false,
   attributionControl: false
 });
 
 map.on('click', function(e){
-    var marker = new L.marker(e.latlng).addTo(map);
-
-    // Search for possible routes
+    if (typeof marker != "undefined") {
+      map.removeLayer(marker);
+    }
+    
+    marker = new L.marker(e.latlng).addTo(map);
+    createRoutes(e.latlng.lat, e.latlng.lng);
 });
 
 
@@ -151,6 +159,127 @@ var layerControl = L.control.groupedLayers(baseLayers, {
   collapsed: isCollapsed
 }).addTo(map);
 
+function searchPlace() {
+  createRoutes(lat, lng);
+}
 
+function createRoutes(lat, lng) {
+
+  /* Search for possible routes */
+  /*$.getJSON( "assets/js/routeAlternativeDemo.json", function( data ) {
+    routeAlternatives = data;
+  });*/
+
+
+  /*$.getJSON( "http://localhost:5000/59.7220/10.048786", function( data ) {
+    routeAlternatives = data;
+  });*/
+
+
+  $.getJSON( "http://localhost:5000/"+ lat + "/" + lng, function( data ) {
+    routeAlternatives = data;
+  });
+
+
+  
+
+  
+
+    // Get lengde, type of route 
+    // Jquery stuff
+
+    // Search routes from flask
+
+    // List ten routes in sidebar
+
+    // Show route in map when clicking the route in the sidebar
+
+
+  $('#routeSuggestions').show();
+}
+
+var geojson;
+function showRoute(num) {
+  startPoint = "&loc=" + routeAlternatives[num].startPoint[0] + "," + routeAlternatives[num].startPoint[1];
+  endPoint = "&loc=" + routeAlternatives[num].endPoint[0] + "," + routeAlternatives[num].endPoint[1];
+  viaPoint1 = "&loc=" + routeAlternatives[num].viaPoint1[0] + "," + routeAlternatives[num].viaPoint1[1];
+  viaPoint2 = "&loc=" + routeAlternatives[num].viaPoint2[0] + "," + routeAlternatives[num].viaPoint2[1];
+
+
+
+  var url = "http://178.62.235.179:8080/viaroute?z=18&output=json"+startPoint+viaPoint1+viaPoint2+endPoint+"&instructions=true";
+
+  $.getJSON( url, function( data ) {
+    geometry = parseGeometry(data.route_geometry, 6);
+
+    var routeLineString = [{
+        "type": "LineString",
+        "coordinates": geometry
+    }];
+
+    var myLines = [{
+        "type": "LineString",
+        "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
+    }, {
+        "type": "LineString",
+        "coordinates": [[10, 60], [11, 60], [12, 60]]
+    }];
+
+    var myStyle = {
+        "color": "#ff7800",
+        "weight": 5,
+        "opacity": 0.65
+    };
+
+    if (typeof geojson != "undefined") {
+      geojson.clearLayers();
+      map.removeLayer(viaMarker1);
+      map.removeLayer(viaMarker2);
+    }
+    
+
+    geojson = L.geoJson(routeLineString, {
+        style: myStyle
+    });
+
+    map.addLayer(geojson);
+
+    // Add via markers
+    viaMarker1 = new L.marker([routeAlternatives[num].viaPoint1[0], routeAlternatives[num].viaPoint1[1]]).addTo(map);
+    //viaMarker1.bindPopup("Viapunkt 1").openPopup();
+    viaMarker2 = new L.marker([routeAlternatives[num].viaPoint2[0], routeAlternatives[num].viaPoint2[1]]).addTo(map);
+    //viaMarker2.bindPopup("Viapunkt 2").openPopup();
+
+    map.fitBounds(geojson.getBounds())
+  });
+  
+}
+
+function parseGeometry(encoded, precision) {
+  precision = Math.pow(10, -precision);
+  var len = encoded.length, index=0, lat=0, lng = 0, array = [];
+  while (index < len) {
+    var b, shift = 0, result = 0;
+    do {
+      b = encoded.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    var dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    lat += dlat;
+    shift = 0;
+    result = 0;
+    do {
+      b = encoded.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    var dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    lng += dlng;
+    //array.push( {lat: lat * precision, lng: lng * precision} );
+    array.push( [lng * precision, lat * precision ] );
+  }
+  return array;
+}
 
 
