@@ -2,6 +2,10 @@
   display: none;
 }
 
+#routeLengthText {
+  font-weight: bold;
+}
+
 
 
 html, body, #container {

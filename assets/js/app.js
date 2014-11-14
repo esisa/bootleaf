@@ -80,7 +80,7 @@ var turkompisenTur = L.tileLayer("http://kart1.turkompisen.no/cache/turkart/{z}/
   maxZoom: 18,
   attribution: 'Turkompisen.no'
 });
-var kartverket = new L.TileLayer("http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo2&zoom={z}&x={x}&y={y}", {
+var kartverket = new L.TileLayer("http://kart1.turkompisen.no/cache/turkart_kartverket/{z}/{x}/{y}.png", {
     subdomains: ["1", "2", "3", "4"],
     //scheme: "tms",
     maxZoom: 18
@@ -154,31 +154,91 @@ var baseLayers = {
   "Kartverket": kartverket
 };
 
+var overlayMaps = {
+    "Rute": geojson
+};
 
+var layerSwitcher = L.control.layers(baseLayers).addTo(map);
+/*
 var layerControl = L.control.groupedLayers(baseLayers, {
   collapsed: isCollapsed
 }).addTo(map);
-
+*/
 function searchPlace() {
   createRoutes(lat, lng);
 }
 
 function createRoutes(lat, lng) {
 
+  // Delete old routes
+  $('#routeSuggestions').empty();
+
+  // Delete map objects
+  if (typeof geojson != "undefined") {
+    geojson.clearLayers();
+    map.removeLayer(viaMarker1);
+    map.removeLayer(viaMarker2);
+  }
+
+  var opts = {
+  lines: 11, // The number of lines to draw
+  length: 7, // The length of each line
+  width: 3, // The line thickness
+  radius: 10, // The radius of the inner circle
+  corners: 1, // Corner roundness (0..1)
+  rotate: 0, // The rotation offset
+  direction: 1, // 1: clockwise, -1: counterclockwise
+  color: '#000', // #rgb or #rrggbb or array of colors
+  speed: 1, // Rounds per second
+  trail: 60, // Afterglow percentage
+  shadow: false, // Whether to render a shadow
+  hwaccel: false, // Whether to use hardware acceleration
+  className: 'spinner', // The CSS class to assign to the spinner
+  zIndex: 2e9, // The z-index (defaults to 2000000000)
+  top: '50%', // Top position relative to parent
+  left: '30%' // Left position relative to parent
+};
+  var target = document.getElementById('routeSuggestions');
+  var spinner = new Spinner(opts).spin(target);
+
   /* Search for possible routes */
   /*$.getJSON( "assets/js/routeAlternativeDemo.json", function( data ) {
     routeAlternatives = data;
   });*/
 
-
-  /*$.getJSON( "http://localhost:5000/59.7220/10.048786", function( data ) {
+ /*
+  $.getJSON( "http://localhost:5000/59.817737462544024/10.020432472229004", function( data ) {
     routeAlternatives = data;
-  });*/
 
+    $.each(routeAlternatives, function( index, route ) {
+      console.log( index + ": " + route.lineArea );
+      var num = index+1;
+      $('#routeSuggestions').append('<p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute('+index+')">Turforslag '+num+'</button></p>');
+    });
 
-  $.getJSON( "http://localhost:5000/"+ lat + "/" + lng, function( data ) {
-    routeAlternatives = data;
   });
+*/
+
+  
+  $.getJSON( "http://localhost:5000/circularRoute/"+ lat + "/" + lng + "/" + $('#routeLength').val(), function( data ) {
+    routeAlternatives = data;
+
+    spinner.stop();
+
+    if(routeAlternatives.length>0) {
+      $.each(routeAlternatives, function( index, route ) {
+        //console.log( index + ": " + route.lineArea );
+        var num = index+1;
+        var routeLength = (route.distance/1000).toFixed(1);
+        var lineAreaPerLength = (route.lineAreaPerLength).toFixed(4);
+        $('#routeSuggestions').append('<p><button type="button" class="btn btn-primary" data-sort="feature-name" onClick="showRoute('+index+')">Lengde: '+routeLength+' Area per length: '+lineAreaPerLength+'</button></p>');
+      });
+    }
+    else {
+      $('#routeSuggestions').append('<h3>Fant ingen turer!</h3>');
+    }
+  });
+
 
 
   
@@ -207,10 +267,12 @@ function showRoute(num) {
 
 
 
-  var url = "http://178.62.235.179:8080/viaroute?z=18&output=json"+startPoint+viaPoint1+viaPoint2+endPoint+"&instructions=true";
+  var url = "http://178.62.235.179:8081/viaroute?z=18&output=json"+startPoint+viaPoint1+viaPoint2+endPoint+"&instructions=true";
 
   $.getJSON( url, function( data ) {
     geometry = parseGeometry(data.route_geometry, 6);
+
+
 
     var routeLineString = [{
         "type": "LineString",
@@ -243,6 +305,10 @@ function showRoute(num) {
     });
 
     map.addLayer(geojson);
+    var overlayMaps = {
+        "Rute": geojson
+    };
+    layerSwitcher.addOverlay(overlayMaps);
 
     // Add via markers
     viaMarker1 = new L.marker([routeAlternatives[num].viaPoint1[0], routeAlternatives[num].viaPoint1[1]]).addTo(map);
